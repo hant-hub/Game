@@ -1,0 +1,3 @@
+[submodule "lib/SimpleRender"]
+	path = lib/SimpleRender
+	url = git@github.com:hant-hub/SimpleRender.git
