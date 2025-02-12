@@ -42,6 +42,8 @@ int main() {
     }
 
     u32 frameCounter = 0;
+    SetColor(t, (sm_vec3f){1.0, 1.0, 1.0});
+    AppendText(t, "Test text", 9, (sm_vec2f){20, 70}, 9);
     while (!glfwWindowShouldClose(sr_context.w)) {
         //poll events
         glfwPollEvents();

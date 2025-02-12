@@ -1,8 +1,8 @@
 TARGET_EXEC := app
 
 BUILD_DIR := ./build
-SRC_DIRS := ./src ./renderers
-INC_SEARCH = ./lib ./include
+SRC_DIRS := ./src
+INC_SEARCH = ./lib
 SHADER_DIR := ./shaders
 RESOURCE_DIR := ./resources
 
