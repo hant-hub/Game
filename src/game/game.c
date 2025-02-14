@@ -98,14 +98,14 @@ int DemoJudge() {
     }
     SR_LOG_DEB("lines: %d", lines);
     SR_LOG_DEB("Incorrect: %d", incorrect);
-    return 0;
+    return incorrect;
 }
 
 void Update(GameState* s, float dt) {
     static int lastbuf = 0;
 
     if (lastbuf != bufend) {
-        DemoJudge();
+        int i = DemoJudge();
         lastbuf = bufend;
     }
     return;
