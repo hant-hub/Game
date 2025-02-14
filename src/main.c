@@ -8,6 +8,7 @@
 #include <sheet.h>
 #include <stdlib.h>
 #include <text.h>
+#include "game/game.h"
 
 int main() {
 
@@ -29,7 +30,8 @@ int main() {
                 .rotation = 0,
                 .size = (sm_vec2f){1080, 1080}}, 1));
 
-    CRASH_CALL(TextInit(t, "resources/fonts/JetBrainsMonoNLNerdFontPropo-Regular.ttf", &p.p, 1));
+    CRASH_CALL(TextInit(t, "resources/fonts/JetBrainsMonoNLNerdFontPropo-Regular.ttf", 60, &p.p, 1));
+    SetArea(t, (sm_vec2f){1080, 1080});
 
     Texture textures[1] = {0};
     CRASH_CALL(LoadTexture(&textures[0], "resources/textures/texture.jpg"))
@@ -43,14 +45,20 @@ int main() {
 
     u32 frameCounter = 0;
     SetColor(t, (sm_vec3f){1.0, 1.0, 1.0});
-    AppendText(t, "Test text", 9, (sm_vec2f){20, 70}, 9);
+    GameState state = {0};
+    double dt = 0;
+    glfwSetCharCallback(sr_context.w, CharHandler);
+    glfwSetKeyCallback(sr_context.w, KeyHandler);
     while (!glfwWindowShouldClose(sr_context.w)) {
+        double start = glfwGetTime();
         //poll events
         glfwPollEvents();
 
         //game logic
+        Update(&state, dt);
 
         //Set UI
+        UItick(&state, t, s);
 
         //draw frame
         frameCounter = (frameCounter + 1) % SR_MAX_FRAMES_IN_FLIGHT;
@@ -59,6 +67,9 @@ int main() {
         NextPass(&p, frameCounter);
         TextDrawFrame(t, &p, frameCounter);
         SubmitFrame(&p, frameCounter);
+
+        double end = glfwGetTime();
+        dt = end - start;
     }
 
     DestroyTexture(&textures[0]);
