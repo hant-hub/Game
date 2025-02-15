@@ -21,6 +21,8 @@ void UItick(GameState* state, TextRenderer* t, SheetRenderer* s);
 //todo: implement via counter
 void FixedUpdate(GameState* s);
 
+//widgets
+void DrawTasks();
 
 
 #endif
