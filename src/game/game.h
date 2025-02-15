@@ -16,7 +16,7 @@ void CharHandler(GLFWwindow* window, u32 code);
 void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 void Update(GameState* s, float dt);
-void UItick(GameState* state, TextRenderer* t, SpriteRenderer* s);
+void UItick(GameState* state, TextRenderer* t, SheetRenderer* s);
 
 //todo: implement via counter
 void FixedUpdate(GameState* s);

@@ -114,7 +114,7 @@ void Update(GameState* s, float dt) {
 
 //main game tick. This is for gameplay only.
 //Will create a menu tick for menu stuff
-void UItick(GameState* state, TextRenderer* t, SpriteRenderer* s) {
+void UItick(GameState* state, TextRenderer* t, SheetRenderer* s) {
     ClearText(t);
 
     AppendText(t, typingBuffer, bufend, (sm_vec2f){-1180, -800}, 1);

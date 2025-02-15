@@ -17,15 +17,15 @@ int main() {
     SubPass passes[2] = {0};
     Attachment attachments[SR_SHEET_ATTACHMENT_NUM + SR_TEXT_NUM_ATTACHMENTS] = {0};
 
-    SpriteGetSubpass(&passes[0], attachments, 0);
+    SheetGetSubpass(&passes[0], attachments, 0);
     TextGetSubpass(&passes[1], attachments, SR_SHEET_ATTACHMENT_NUM);
 
     PresentInfo p = {0};
     CRASH_CALL(InitPresent(&p, passes, 2, attachments, SR_SHEET_ATTACHMENT_NUM + SR_TEXT_NUM_ATTACHMENTS));
 
-    SpriteRenderer* s = calloc(sizeof(SpriteRenderer), 1);
+    SheetRenderer* s = calloc(sizeof(SheetRenderer), 1);
     TextRenderer* t = calloc(sizeof(TextRenderer), 1);
-    CRASH_CALL(SpriteInit(s, &p.p, 0, (Camera){
+    CRASH_CALL(SheetInit(s, &p.p, 0, (Sh_Camera){
                 .pos = (sm_vec2f){0, 0},
                 .rotation = 0,
                 .size = (sm_vec2f){1080, 1080}}, 1));
@@ -35,11 +35,11 @@ int main() {
 
     Texture textures[1] = {0};
     CRASH_CALL(LoadTexture(&textures[0], "resources/textures/texture.jpg"))
-    CRASH_CALL(SetTextureSlot(s, &textures[0], 0))
+    CRASH_CALL(SHSetTextureSlot(s, &textures[0], 0))
 
-    SheetHandle s1 = CreateSprite(s, (sm_vec2f){0,0}, (sm_vec2f){400,400}, 0, 0);
+    SheetHandle s1 = CreateSpriteSh(s, (sm_vec2f){0,0}, (sm_vec2f){400,400}, 0, 0);
     {
-        SheetEntry* e = GetSprite(s, s1);
+        SheetEntry* e = GetSpriteSh(s, s1);
         e->scale = (sm_vec2f){2, 2};
     }
 
@@ -63,7 +63,7 @@ int main() {
         //draw frame
         frameCounter = (frameCounter + 1) % SR_MAX_FRAMES_IN_FLIGHT;
         StartFrame(&p, frameCounter);
-        SpriteDrawFrame(s, &p, frameCounter);
+        SheetDrawFrame(s, &p, frameCounter);
         NextPass(&p, frameCounter);
         TextDrawFrame(t, &p, frameCounter);
         SubmitFrame(&p, frameCounter);
@@ -73,9 +73,9 @@ int main() {
     }
 
     DestroyTexture(&textures[0]);
-    DestroySprite(s, s1);
+    DestroySpriteSh(s, s1);
     TextDestroy(t);
-    SpriteDestroy(s);
+    SheetDestroy(s);
     free(s);
     free(t);
     DestroyPresent(&p);
