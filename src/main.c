@@ -1,7 +1,8 @@
 #include "config.h"
 #include "frame.h"
 #include "init.h"
-#include "texture.h"
+#include "level1/level1.h"
+#include "test.h"
 #include "util.h"
 #include <GLFW/glfw3.h>
 #include <log.h>
@@ -9,6 +10,7 @@
 #include <stdlib.h>
 #include <text.h>
 #include "game/game.h"
+#include "test.h"
 
 int main() {
 
@@ -28,52 +30,53 @@ int main() {
     CRASH_CALL(SheetInit(s, &p.p, 0, (Sh_Camera){
                 .pos = (sm_vec2f){0, 0},
                 .rotation = 0,
-                .size = (sm_vec2f){1080, 1080}}, 1));
+                .size = (sm_vec2f){1080, 1080}}, 20));
 
-    CRASH_CALL(TextInit(t, "resources/fonts/JetBrainsMonoNLNerdFontPropo-Regular.ttf", 60, &p.p, 1));
+    CRASH_CALL(TextInit(t, NULL, &p.p, 1));
     SetArea(t, (sm_vec2f){1080, 1080});
 
-    Texture textures[1] = {0};
-    CRASH_CALL(LoadTexture(&textures[0], "resources/textures/texture.jpg"))
-    CRASH_CALL(SHSetTextureSlot(s, &textures[0], 0))
 
-    SheetHandle s1 = CreateSpriteSh(s, (sm_vec2f){0,0}, (sm_vec2f){400,400}, 0, 0);
-    {
-        SheetEntry* e = GetSpriteSh(s, s1);
-        e->scale = (sm_vec2f){2, 2};
-    }
-
-    u32 frameCounter = 0;
-    SetColor(t, (sm_vec3f){1.0, 1.0, 1.0});
     GameState state = {0};
-    double dt = 0;
-    glfwSetCharCallback(sr_context.w, CharHandler);
-    glfwSetKeyCallback(sr_context.w, KeyHandler);
+
+
+
+    InitGame(&state, t, s);
     while (!glfwWindowShouldClose(sr_context.w)) {
-        double start = glfwGetTime();
-        //poll events
-        glfwPollEvents();
 
-        //game logic
-        Update(&state, dt);
+        switch (state.mode) {
+            case LEVEL1_EDIT:
+                {
+                    Level1Init(&state);
+                    Level1Update(&state, &p); 
+                    Level1Destroy(&state);
+                }
+            break;
+            case PLACEHOLDER_EDIT: 
+                {
+                    TestInit(&state);
+                    TestUpdate(&state, &p); 
+                    TestDestroy(&state);
+                    break;
+                }
 
-        //Set UI
-        UItick(&state, t, s);
+            case PLACEHOLDER_PROMPT:
+                {
+                    TestPromptInit(&state);
+                    TestPromptUpdate(&state, &p); 
+                    TestPromptDestroy(&state);
+                    break;
+                }
 
-        //draw frame
-        frameCounter = (frameCounter + 1) % SR_MAX_FRAMES_IN_FLIGHT;
-        StartFrame(&p, frameCounter);
-        SheetDrawFrame(s, &p, frameCounter);
-        NextPass(&p, frameCounter);
-        TextDrawFrame(t, &p, frameCounter);
-        SubmitFrame(&p, frameCounter);
-
-        double end = glfwGetTime();
-        dt = end - start;
+            default:
+                {
+                    SR_LOG_ERR("Invalid Game Mode");
+                    glfwSetWindowShouldClose(sr_context.w, GLFW_TRUE);
+                    break;
+                }
+        }
     }
 
-    DestroyTexture(&textures[0]);
-    DestroySpriteSh(s, s1);
+    DestroyGame(&state, t, s);
     TextDestroy(t);
     SheetDestroy(s);
     free(s);

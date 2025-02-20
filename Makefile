@@ -2,7 +2,7 @@ TARGET_EXEC := app
 
 BUILD_DIR := ./build
 SRC_DIRS := ./src
-INC_SEARCH = ./lib
+INC_SEARCH = ./lib ./src
 SHADER_DIR := ./shaders
 RESOURCE_DIR := ./resources
 
@@ -51,6 +51,7 @@ LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi -lm -lfre
 
 # will use precompiled static lib
 	
+.PHONY: resources
 
 #compile executable
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS) $(COMPSHADERS) resources
