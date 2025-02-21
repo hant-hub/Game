@@ -2,7 +2,10 @@
 #include "frame.h"
 #include "game.h"
 #include "init.h"
+#include "log.h"
+#include "parse.h"
 #include "sheet.h"
+#include "text.h"
 #include <GLFW/glfw3.h>
 
 
@@ -28,6 +31,9 @@ void TestInit(GameState* state) {
         SR_LOG_DEB("TexID: %d", i);
         CRASH_CALL(LoadTexture(&state->curr.textures[i], TexPaths[i]));
     }
+
+    CRASH_CALL(LoadFont(FONTPATH("JetBrainsMonoNLNerdFontPropo-Regular.ttf"), 60, &state->f));
+    SetFont(state->t, &state->f);
 
     SHSetTextureSlots(state->s, state->curr.textures, ARRAY_SIZE(TexPaths));
 
@@ -57,6 +63,7 @@ void TestDestroy(GameState* state) {
     for (int i = 0; i < ARRAY_SIZE(TexPaths); i++) {
         DestroyTexture(&state->curr.textures[i]);
     }
+    DestroyFont(&state->f);
 }
 
 void TestUpdate(GameState* state, PresentInfo* p) {
@@ -86,12 +93,64 @@ void TestUpdate(GameState* state, PresentInfo* p) {
         accum += dt;
         ClearText(state->t);
         SetColor(state->t, (sm_vec3f){0.0, 0.0, 0.0});
+        EditArea(state, &c, (sm_vec2f){-400, -720}, 2.0, sc->graphics[CURSOR_IDX], accum);
         SetColor(state->t, (sm_vec3f){1.0, 1.0, 1.0});
         if (Button(state, &c, (sm_vec2f){-1380, 850}, (sm_vec2f){1000, 350}, sc->graphics[SUBMIT_IDX])) {
             SR_LOG_DEB("submit");
             state->mode = PLACEHOLDER_PROMPT;
             return;
         }
+
+        static u32 last = 0;
+        if (last != state->wininfo.b.bufend) {
+            
+            Token t = {0};
+            Tokenizer tok = (Tokenizer) {
+                .At = state->wininfo.b.typingBuffer,
+                .Base = state->wininfo.b.typingBuffer,
+                .size = state->wininfo.b.bufend
+            };
+            SR_LOG_DEB("Tokenizer Run");
+            for (Token t = {0}; t.type != TOKEN_EOB; t = GetToken(&tok)) {
+                switch (t.type) {
+                    case TOKEN_WORD:
+                        {
+                            SR_LOG_DEB("Word: %.*s", t.length, t.pos);
+                            break;
+                        }
+                    case TOKEN_NUMERIC:
+                        {
+                            SR_LOG_DEB("Number: %.*s", t.length, t.pos);
+                            break;
+                        }
+                    case TOKEN_PUNCTUATION:
+                        {
+                            SR_LOG_DEB("Punctuation: %c", *t.pos);
+                            break;
+                        }
+                    case TOKEN_WHITESPACE:
+                        {
+                            SR_LOG_DEB("Whitespace: %d", t.length);
+                            break;
+                        }
+                    case TOKEN_NEWLINE:
+                        {
+                            SR_LOG_DEB("Newline");
+                            break;
+                        }
+                    case TOKEN_EOB:
+                        {
+                            SR_LOG_DEB("EOB");
+                            break;
+                        }
+                    default: 
+                        {
+                            break;
+                        }
+                }
+            }
+        }
+        last = state->wininfo.b.bufend;
 
 
         if (glfwGetKey(sr_context.w, GLFW_KEY_ESCAPE) == GLFW_PRESS) {

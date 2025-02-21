@@ -32,7 +32,7 @@ void InitGame(GameState* state, TextRenderer* t, SheetRenderer* s) {
     state->t = t;
     state->s = s;
 
-    //state->mode = PLACEHOLDER_PROMPT;
+    //state->mode = PLACEHOLDER_EDIT;
     state->mode = LEVEL1_EDIT;
 }
 
