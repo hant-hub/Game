@@ -42,7 +42,6 @@ int main() {
 
     InitGame(&state, t, s);
     while (!glfwWindowShouldClose(sr_context.w)) {
-
         switch (state.mode) {
             case LEVEL1_EDIT:
                 {
@@ -51,28 +50,43 @@ int main() {
                     Level1Destroy(&state);
                 }
             break;
+            case LEVEL1_PROMPT:
+                {
+                    Level1PromptInit(&state);
+                    Level1PromptUpdate(&state, &p); 
+                    Level1PromptDestroy(&state);
+                }
+            break;
+            case LEVEL2_PROMPT:
+                {
+                    state.mode = -1;
+                }
+            break;
+            case LEVEL2_EDIT:
+                {
+                    state.mode = -1;
+                }
+            break;
             case PLACEHOLDER_EDIT: 
                 {
                     TestInit(&state);
                     TestUpdate(&state, &p); 
                     TestDestroy(&state);
-                    break;
                 }
-
+            break;
             case PLACEHOLDER_PROMPT:
                 {
                     TestPromptInit(&state);
                     TestPromptUpdate(&state, &p); 
                     TestPromptDestroy(&state);
-                    break;
                 }
-
+            break;
             default:
                 {
                     SR_LOG_ERR("Invalid Game Mode");
                     glfwSetWindowShouldClose(sr_context.w, GLFW_TRUE);
-                    break;
                 }
+            break;
         }
     }
 

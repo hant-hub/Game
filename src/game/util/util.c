@@ -1,4 +1,3 @@
-#include "log.h"
 #include "parse.h"
 #include "util.h"
 
@@ -32,6 +31,7 @@ Token GetToken(Tokenizer* t) {
         w.type = TOKEN_EOB;
         w.pos = t->At;
         w.length = 0;
+        return w;
     }
 
     //skip whitespace

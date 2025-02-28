@@ -51,7 +51,7 @@ LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi -lm -lfre
 
 # will use precompiled static lib
 	
-.PHONY: resources
+.PHONY: resources clean
 
 #compile executable
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS) $(COMPSHADERS) resources
@@ -59,16 +59,16 @@ $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS) $(COMPSHADERS) resources
 	compiledb -n make
 	$(CC) $(CFLAGS) $(OBJS) ./$(BUILD_DIR)/sr.a $(INC_FLAGS)  -o $(BUILD_DIR)/$(TARGET_EXEC) $(LDFLAGS);
 
-# Shaders
-$(BUILD_DIR)/shaders/%.spv: $(SHADER_DIR)/% 
-	mkdir -p $(dir $@)
-	glslc $< -o $@  
 
 #resources
 resources :
 	rm -rf $(BUILD_DIR)/resources
 	mkdir -p $(RESOURCE_DIR)
 	cp $(RESOURCE_DIR) -r $(BUILD_DIR)/resources 
+
+clean:
+	rm -rf $(BUILD_DIR)/src
+	rm $(BUILD_DIR)/$(TARGET_EXEC)
 
 # Build step for C source
 $(BUILD_DIR)/%.c.o: %.c

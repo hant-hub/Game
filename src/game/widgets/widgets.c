@@ -5,16 +5,17 @@
 #include "text.h"
 #include "vec2.h"
 #include <GLFW/glfw3.h>
+#include <math.h>
 
 
 //The softlinewidth only breaks
 //on spaces
-static const u32 softlinewidth = 20;
+static const u32 softlinewidth = 25;
 //linewidth is the absolute max line
 //width, all characters beyond
 //this point are reflowed.
-static const u32 linewidth = 25;
-
+static const u32 linewidth = 1700;
+static float currlinewidth = 0;
 
 
 void CharHandler(GLFWwindow* window, u32 code) {
@@ -33,6 +34,7 @@ void CharHandler(GLFWwindow* window, u32 code) {
         return;
     }
     if (bufend && lines[*lineend] >= softlinewidth && code == ' ') {
+        SR_LOG_DEB("soft: %d", lines[*lineend]);
         if (*bufend >= MAX_TYPE_SIZE || *lineend >= MAX_TYPE_LINES) {
             return;
         }
@@ -40,7 +42,8 @@ void CharHandler(GLFWwindow* window, u32 code) {
         (*lineend)++;
         return;
     }
-    if (bufend && lines[*lineend] >= linewidth) {
+    if (bufend && currlinewidth >= linewidth) {
+        SR_LOG_DEB("hit: %d", lines[*lineend]);
         if (*bufend >= MAX_TYPE_SIZE || *lineend >= MAX_TYPE_LINES) {
             return;
         }
@@ -87,14 +90,14 @@ void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods)
     }
 }
 
-void EditArea(GameState* state, UIContext* c, sm_vec2f pos, float scale, SheetHandle cursor, double accum) {
+void EditArea(GameState* state, UIContext* c, sm_vec2f pos, u32 layer, float scale, SheetHandle cursor, double accum) {
     WindowInfo* winfo = glfwGetWindowUserPointer(sr_context.w);
     
     bool typingEnable = winfo->b.typingEnable;
     u32* bufend = &winfo->b.bufend;
     char* typingBuffer = (char*)&winfo->b.typingBuffer;
 
-    AppendText(state->t, (char*)typingBuffer, *bufend, pos, 1.0, scale);
+    AppendText(state->t, (char*)typingBuffer, *bufend, pos, layer, scale);
     {
         static double thresh = 0;
         static bool flip = FALSE;
@@ -113,6 +116,8 @@ void EditArea(GameState* state, UIContext* c, sm_vec2f pos, float scale, SheetHa
             e->layer = -10;
         }
     }
+    sm_vec2f textpos = GetTextPos(state->t);
+    currlinewidth = textpos.x - pos.x;
 }
 
 bool Button(GameState* s, UIContext* c,
@@ -174,9 +179,31 @@ bool Button(GameState* s, UIContext* c,
     return result;
 }
 
-bool AnimateText(GameState* s, sm_vec2f pos, double accum) {
+bool AnimateText(GameState* s, const char* text, u32 size, sm_vec2f pos, i32 layer, float scale, double accum, double rate) {
+    double integer;
+    modf(accum/rate, &integer);
 
+    if (integer > size) integer = size;
+    AppendText(s->t, text, integer, pos, layer, scale);
 
 
     return FALSE;
 }
+
+//sets the positions of Nametag
+void SetNameTag(GameState* s, u32 left, u32 middle, u32 right, double width, sm_vec2f pos, sm_vec3f color) {
+    SheetEntry* l = GetSpriteSh(s->s, left);
+    SheetEntry* m = GetSpriteSh(s->s, middle);
+    SheetEntry* r = GetSpriteSh(s->s, right);
+
+    l->pos = pos;
+    m->pos = (sm_vec2f){l->pos.x + width/2, l->pos.y};
+    r->pos = (sm_vec2f){m->pos.x + width/2, m->pos.y};
+
+    m->size.x = width;
+
+    l->color = color;
+    m->color = color;
+    r->color = color;
+}
+

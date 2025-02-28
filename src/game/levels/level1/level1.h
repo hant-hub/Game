@@ -10,6 +10,4 @@ void Level1PromptInit(GameState* state);
 void Level1PromptUpdate(GameState* state, PresentInfo* p);
 void Level1PromptDestroy(GameState* state);
 
-
-
 #endif
