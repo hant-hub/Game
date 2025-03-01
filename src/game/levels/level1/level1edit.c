@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <GLFW/glfw3.h>
-#include "level1poems.c.h"
+#include "level1poems.h"
 
 typedef enum {
     TEX_CHISEL = 0,
@@ -151,13 +151,20 @@ void Level1Update(GameState* state, PresentInfo* p) {
         EditArea(state, &c, (sm_vec2f){-400, -820}, 3, 1.2, sc->graphics[SPRITE_CURSOR], accum);
         SetColor(state->t, (sm_vec3f){1.0, 1.0, 1.0});
 
-        for (int i = 0; i < stagerequirements[substage].num; i++) {
+        if (results[0]) SetColor(state->t, (sm_vec3f){0.5, 0.0, 0.0});
+        else SetColor(state->t, (sm_vec3f){0.0, 0.5, 0.0});
+        AppendText(state->t, 
+                Requirements[stagerequirements[substage].startidx],
+                strlen(Requirements[stagerequirements[substage].startidx]), 
+                (sm_vec2f){-1080*1.8, -800}, 3.5, 1.3);
+        for (int i = 1; i < stagerequirements[substage].num; i++) {
             if (results[i]) SetColor(state->t, (sm_vec3f){0.5, 0.0, 0.0});
             else SetColor(state->t, (sm_vec3f){0.0, 0.5, 0.0});
+            float y = GetTextPos(state->t).y;
             AppendText(state->t, 
                     Requirements[stagerequirements[substage].startidx + i],
                     strlen(Requirements[stagerequirements[substage].startidx + i]), 
-                    (sm_vec2f){-1080*1.8, -800 + 60*1.3*i}, 3.5, 1.3);
+                    (sm_vec2f){-1080*1.8, y + 60*1.5}, 3.5, 1.3);
         }
 
         if (!feedback) {
@@ -179,7 +186,9 @@ void Level1Update(GameState* state, PresentInfo* p) {
                 if (results[i]) enableButton = FALSE;
             }
             if (enableButton && Button(state, &c, (sm_vec2f){-1380, 850}, (sm_vec2f){1000, 350}, sc->graphics[SPRITE_SUBMIT])) {
-                FILE* save = fopen("./save/level1.txt", "a+");
+                char savename[32];
+                snprintf(savename, 32, "./save/level1-%d.txt", substage + 1);
+                FILE* save = fopen(savename, "w");
                 SR_LOG_DEB("save: %ld", (u64)save);
                 fprintf(save, "\n\n%.*s", state->wininfo.b.bufend, state->wininfo.b.typingBuffer);
                 fclose(save);

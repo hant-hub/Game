@@ -68,35 +68,158 @@ static const sm_vec2f TagPos[] = {
 };
 
 static const u32 DialogueConf[] = {
-    0,
-    1,
-    1,
-    0,
-    0,
-    1,
-    0,
-
-    0,
-    0,
+    YOU_ID,
+    YOU_ID,
+    YOU_ID,
+    YOU_ID,
+    JUDGE_ID,
+    YOU_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    YOU_ID,
+    YOU_ID,
+    JUDGE_ID,
+    YOU_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    //stage 1 --------------
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    //stage 2 --------------
+    YOU_ID,
+    JUDGE_ID,
+    YOU_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    YOU_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    //stage 3 -----------
+    JUDGE_ID,
+    YOU_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    //stage 4 -----------
+    JUDGE_ID,
+    //stage 5 ----------
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    YOU_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    YOU_ID,
+    JUDGE_ID,
+    JUDGE_ID,
 };
 
 
 static const char* Dialogue[] = {
-    "Here is the first word", //judge
-    "Here is a response", //you
-    "Here is part 1", //you
-    "Here is part 2", //judge
-    "Here is part 1", //judge
-    "Here is part 2", //you
-    "Here is the last line", //judge
+    "*You have arrived early to your first lecture\n of the day*",
+    "*With no friends and nowhere to go, you decide\nto simply walk into the class and secure\nyour seat*",
+    "*You sit down at the perfect chair, not too far\nto the back, yet close enough to view your\nprofessor*",
+    "*Not to mention, a perfect view towards the\nvast villas along the hill*",
+
+    "Hmm?",
+
+    "*Your professor, who was previously engrossed\nin some writing, looks up to you*",
+
+    "Oh, I see you've decided to come in early today",
+    "Trying to become one of my most diligent\nstudents, a disciple of mine perhaps?",
+
+    "...",
+    "*The near-empty hall engulfs you with its\nsilence*",
+
+    "Well, you're the only one here",
+
+    "*The academy's bourdon bell rings*",
+
+    "The rest of our class will be here any moment",
+    "But before the second bell rings, let's do some\npractice, shall we?",
+    "This is an applied mathematical poetry class\nafter all!",
+    "First, write me a poem of 8 lines",
+
+    //-------------stage 1------------
+
+    "Let's try to fit in one more before class, okay?",
+    "This time, don't only focus on the number of\nlines, but also how many words within them",
+    "Write me a poem of, hmm",
+    "6 lines exact, but each with exactly 5 words\nin each",
+
+    //-------------stage 2------------
+
+    "*Your classmates slowly trickle into the room*",
+
+    "Hello class, settle down, settle down",
+
+    "*The final bell rings as everyone gets to their\nseats*",
+
+    "Thank you all for coming",
+    "Let's pick up where we left off, alright",
+    "And I expect absolutely NO interruptions this\ntime",
+    "I'll see that every miscreant with a loose toga\ngets an additional 5 day suspension",
+
+    "*You can hear some girls in the back of class\ngiggling*",
+
+    "Hmmph",
+    "If you all want to know how to write freely, you\nmust learn how to write correctly",
+    "By defining your abilities now, you'll find it\nmuch easier to flow later on",
+    "So for now, let's practice with simple\noscillation",
+    "So I want you to write a poem where every odd\nline, starting at 1, must have 6 words",
+    "And every other line, the evens, deliver 4",
+
+    //-------------stage 3---------------
+    "Now, let's move on to some linear\nequations, shall we?",
+
+    "*On the board he writes a simple equation,\ny = x + 1*",
+
+    "Let's write a poem following this\nbasic structure",
+    "Begin with one word",
+    "Each line should be one word longer\nthan the last",
+    "Make sure to write at least one line",
+    //-------------stage 4---------------
+    "Similar poem, minimum lines 3, but now\ny = -x + 5",
+    //-------------stage 5---------------
+    "Great",
+    "Now let's continue onto a more advanced\nfunction",
+    "Hmm, for fun, let's conclude with a fun one",
+    "Has anyone here worked with the Fibonacci\nsequence?",
     
-    "Idk man",
-    "Do it again",
+    "*A few hands across the class raise*",
+
+    "The Fibonacci sequence is defined as follows",
+    "Each term is the sum of the preceeding two",
+    "For the base case we stipulate that the first\nand second terms are one",
+    "Understand?",
+
+    "*A few more hands are raised*",
+
+    "Sorry, we don't have time for further\nexplanation",
+    "Build me a poem in which each line's word\ncount follows the Fibonacci sequence",
 };
 
 static const Substage dialoguestages[] = {
-    (Substage){0, 7},
-    (Substage){7, 2},
+    (Substage){0, 16},
+    (Substage){16, 4},
+    (Substage){20, 14},
+    (Substage){34, 6},
+    (Substage){40, 1},
+    (Substage){41, 12},
 };
 
 static  u32 DialogLens[ARRAY_SIZE(Dialogue)] = {

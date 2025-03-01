@@ -10,7 +10,7 @@
 
 //The softlinewidth only breaks
 //on spaces
-static const u32 softlinewidth = 25;
+static const u32 softlinewidth = 1400;
 //linewidth is the absolute max line
 //width, all characters beyond
 //this point are reflowed.
@@ -33,7 +33,7 @@ void CharHandler(GLFWwindow* window, u32 code) {
     if (*bufend >= MAX_TYPE_SIZE) {
         return;
     }
-    if (bufend && lines[*lineend] >= softlinewidth && code == ' ') {
+    if (bufend && currlinewidth >= softlinewidth && code == ' ') {
         SR_LOG_DEB("soft: %d", lines[*lineend]);
         if (*bufend >= MAX_TYPE_SIZE || *lineend >= MAX_TYPE_LINES) {
             return;
@@ -98,6 +98,8 @@ void EditArea(GameState* state, UIContext* c, sm_vec2f pos, u32 layer, float sca
     char* typingBuffer = (char*)&winfo->b.typingBuffer;
 
     AppendText(state->t, (char*)typingBuffer, *bufend, pos, layer, scale);
+    sm_vec2f textpos = GetTextPos(state->t);
+    currlinewidth = textpos.x - pos.x;
     {
         static double thresh = 0;
         static bool flip = FALSE;
@@ -116,8 +118,6 @@ void EditArea(GameState* state, UIContext* c, sm_vec2f pos, u32 layer, float sca
             e->layer = -10;
         }
     }
-    sm_vec2f textpos = GetTextPos(state->t);
-    currlinewidth = textpos.x - pos.x;
 }
 
 bool Button(GameState* s, UIContext* c,

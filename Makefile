@@ -54,7 +54,7 @@ LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi -lm -lfre
 .PHONY: resources clean
 
 #compile executable
-$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS) $(COMPSHADERS) resources
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS) $(SRCS) $(COMPSHADERS) resources
 	clear
 	compiledb -n make
 	$(CC) $(CFLAGS) $(OBJS) ./$(BUILD_DIR)/sr.a $(INC_FLAGS)  -o $(BUILD_DIR)/$(TARGET_EXEC) $(LDFLAGS);

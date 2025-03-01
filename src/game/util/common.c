@@ -1,3 +1,4 @@
+#include "log.h"
 #include "parse.h"
 #include <string.h>
 
