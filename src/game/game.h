@@ -44,10 +44,10 @@ typedef enum {
 } SoundID;
 
 void audio_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount);
-bool LoadSound(GameAudio* a, SoundID id, const char* filepath, bool loop, float vol);
-void PlaySound(GameAudio* a, SoundID id);
-void ResetSound(GameAudio* a, SoundID id);
-void StopSound(GameAudio* a, SoundID id);
+bool ma_LoadSound(GameAudio* a, SoundID id, const char* filepath, bool loop, float vol);
+void ma_PlaySound(GameAudio* a, SoundID id);
+void ma_ResetSound(GameAudio* a, SoundID id);
+void ma_StopSound(GameAudio* a, SoundID id);
 
 void CharHandler(GLFWwindow* window, u32 code);
 void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods);

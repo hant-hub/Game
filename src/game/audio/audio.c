@@ -78,20 +78,20 @@ void audio_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_ui
 
 }
 
-bool LoadSound(GameAudio* a, SoundID id, const char* filepath, bool loop, float vol) {
+bool ma_LoadSound(GameAudio* a, SoundID id, const char* filepath, bool loop, float vol) {
     a->playing[id] = FALSE;
     a->valid[id] = TRUE;
     a->loop[id] = loop;
     a->vols[id] = vol;
     return ma_decoder_init_file(filepath, &a->dconf, &a->sources[id]);
 }
-void PlaySound(GameAudio* a, SoundID id) {
+void ma_PlaySound(GameAudio* a, SoundID id) {
     a->playing[id] = TRUE;
 }
-void StopSound(GameAudio* a, SoundID id) {
+void ma_StopSound(GameAudio* a, SoundID id) {
     a->playing[id] = FALSE;
 }
 
-void ResetSound(GameAudio* a, SoundID id) {
+void ma_ResetSound(GameAudio* a, SoundID id) {
     ma_decoder_seek_to_pcm_frame(&a->sources[id], 0);
 }

@@ -96,7 +96,7 @@ void TestUpdate(GameState* state, PresentInfo* p) {
         EditArea(state, &c, (sm_vec2f){-400, -720}, 1.0, 2.0, sc->graphics[CURSOR_IDX], accum);
         SetColor(state->t, (sm_vec3f){1.0, 1.0, 1.0});
         if (Button(state, &c, (sm_vec2f){-1380, 850}, (sm_vec2f){1000, 350}, sc->graphics[SUBMIT_IDX])) {
-            StopSound(&state->audio, TEST_MUSIC);
+            ma_StopSound(&state->audio, TEST_MUSIC);
             SR_LOG_DEB("submit");
             state->mode = PLACEHOLDER_PROMPT;
             return;
@@ -155,7 +155,7 @@ void TestUpdate(GameState* state, PresentInfo* p) {
 
         static double cool = 0;
         if (accum > cool && glfwGetKey(sr_context.w, GLFW_KEY_P) == GLFW_PRESS) {
-            PlaySound(&state->audio, TEST_MUSIC);
+            ma_PlaySound(&state->audio, TEST_MUSIC);
             cool = accum + 0.5;
         }
 

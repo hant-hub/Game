@@ -59,7 +59,8 @@ void InitGame(GameState* state, TextRenderer* t, SheetRenderer* s) {
     
     //load audio
 
-    LoadSound(a, TEST_MUSIC, SOUNDPATH("testmusic.wav"), TRUE, 0.5);
+    ma_LoadSound(a, TEST_MUSIC, SOUNDPATH("testmusic.wav"), TRUE, 0.5);
+    ma_PlaySound(a, TEST_MUSIC);
     ma_device_start(&a->device);
 
 
