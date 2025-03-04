@@ -65,6 +65,8 @@ void InitGame(GameState* state, TextRenderer* t, SheetRenderer* s) {
 
 
     //state->mode = PLACEHOLDER_EDIT;
+    //state->mode = LEVEL2_EDIT;
+    //state->mode = LEVEL2_PROMPT;
     state->mode = LEVEL1_PROMPT;
     state->curr.stage = 0;
     //state->mode = LEVEL1_EDIT;

@@ -120,6 +120,34 @@ void EditArea(GameState* state, UIContext* c, sm_vec2f pos, u32 layer, float sca
     }
 }
 
+bool KeyButton(GameState* s, UIContext* c, u32 uuid) {
+
+    if (c->active == uuid) {
+        if (c->hot == GLFW_KEY_SPACE && glfwGetKey(sr_context.w, GLFW_KEY_SPACE) == GLFW_RELEASE) {
+            c->active = -1;
+            c->hot = -1;
+            return TRUE;
+        }
+        if (c->hot == GLFW_MOUSE_BUTTON_1 && glfwGetMouseButton(sr_context.w, GLFW_MOUSE_BUTTON_1) == GLFW_RELEASE) {
+            c->active = -1;
+            c->hot = -1;
+            return TRUE;
+        }
+    }
+
+
+    if (glfwGetKey(sr_context.w, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        c->active = uuid;
+        c->hot = GLFW_KEY_SPACE;
+    }
+    if (glfwGetMouseButton(sr_context.w, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+        c->active = uuid;
+        c->hot = GLFW_MOUSE_BUTTON_1;
+    }
+
+    return FALSE;
+}
+
 bool Button(GameState* s, UIContext* c,
             sm_vec2f pos, sm_vec2f size,
             SheetHandle uuid) {

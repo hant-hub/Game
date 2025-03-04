@@ -21,6 +21,7 @@ typedef enum {
     LEVEL1_EDIT,
     LEVEL2_PROMPT,
     LEVEL2_EDIT,
+    LEVEL_SELECT,
 } ScreenState;
 
 typedef struct GameState GameState;
@@ -102,6 +103,7 @@ static const sm_vec2f ButtonTable[] = {
 
 void EditArea(GameState* state, UIContext* c, sm_vec2f pos, u32 layer, float scale, SheetHandle cursor, double accum);
 bool Button(GameState* s, UIContext* c, sm_vec2f pos, sm_vec2f size, SheetHandle uuid);
+bool KeyButton(GameState* s, UIContext* c, u32 uuid);
 
 bool AnimateText(GameState* s, const char* text, u32 size, sm_vec2f pos, i32 layer, float scale, double accum, double rate);
 void SetNameTag(GameState* s, u32 left, u32 middle, u32 right, double width, sm_vec2f pos, sm_vec3f color);
@@ -126,6 +128,6 @@ typedef struct {
 
 
 typedef void (*essentialreq)(char*,u32,u32*);
-typedef u32 (*optionreq)(const char*, u32);
+typedef u32 (*optionreq)(char*, u32);
 
 #endif

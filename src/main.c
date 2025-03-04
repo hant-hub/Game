@@ -2,6 +2,8 @@
 #include "frame.h"
 #include "init.h"
 #include "level1/level1.h"
+#include "level2/level2.h"
+#include "levelselect.h"
 #include "test.h"
 #include "util.h"
 #include <GLFW/glfw3.h>
@@ -59,12 +61,17 @@ int main() {
             break;
             case LEVEL2_PROMPT:
                 {
-                    state.mode = -1;
+                    Level2PromptInit(&state);
+                    Level2PromptUpdate(&state, &p); 
+                    Level2PromptDestroy(&state);
                 }
             break;
             case LEVEL2_EDIT:
                 {
-                    state.mode = -1;
+
+                    Level2Init(&state);
+                    Level2Update(&state, &p); 
+                    Level2Destroy(&state);
                 }
             break;
             case PLACEHOLDER_EDIT: 
@@ -80,6 +87,13 @@ int main() {
                     TestPromptUpdate(&state, &p); 
                     TestPromptDestroy(&state);
                 }
+            break;
+            case LEVEL_SELECT:
+            {
+                    LevelSelectInit(&state);
+                    LevelSelectUpdate(&state, &p); 
+                    LevelSelectDestroy(&state);
+            }
             break;
             default:
                 {

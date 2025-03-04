@@ -1,27 +1,19 @@
 #include "game.h"
-#include "init.h"
+#include "level2.h"
+#include "level2poems.h"
+#include <string.h>
 #include "log.h"
 #include "sheet.h"
-#include "text.h"
-#include "texture.h"
-#include "util.h"
-#include "vec2.h"
-#include <stdio.h>
-#include <string.h>
-#include <GLFW/glfw3.h>
-#include "level1poems.h"
 
 typedef enum {
-    TEX_CHISEL = 0,
-    TEX_JUDGE,
-    TEX_PROMPT,
+    TEX_PROMPT = 0,
     TEX_EDIT,
+    TEX_JUDGE,
     TEX_SPEECH,
-    TEX_SUBMIT,
+    TEX_SUBMIT
 } TexID;
 
 typedef enum {
-    SPRITE_CHISEL = 0,
     SPRITE_EDIT,
     SPRITE_PROMPT,
     SPRITE_SPEECH_TOP,
@@ -34,18 +26,15 @@ typedef enum {
 } SpriteID;
 
 static const char* TexPaths[] = {
-    TEXPATH("level1/Chisel.png"),
-    TEXPATH("level1/Judge_1.png"),
-    TEXPATH("level1/L_window_1.png"),
-    TEXPATH("level1/R_window_1.png"),
+    TEXPATH("level2/L_window_2.png"),
+    TEXPATH("level2/R_window_2.png"),
+    TEXPATH("level2/Judge_2.png"),
     TEXPATH("level1/speech_bubble.png"),
-    TEXPATH("level1/submit_button_1.png"),
+    TEXPATH("level2/submit_button_2.png"),
 };
 
-
-void Level1Init(GameState* state) {
-    //load textures
-    
+void Level2Init(GameState* state) {
+    SR_LOG_DEB("hit");
     for (int i = 0; i < ARRAY_SIZE(TexPaths); i++) {
         SR_LOG_DEB("TexID: %d", i);
         CRASH_CALL(LoadTextureConfig(&state->curr.textures[i], TexPaths[i], (TextureConfig) {
@@ -55,47 +44,35 @@ void Level1Init(GameState* state) {
                     }));
     }
 
-    //load font
     CRASH_CALL(LoadFont(FONTPATH("dogicapixel.ttf"), 60, &state->f));
     SetFont(state->t, &state->f);
 
     SHSetTextureSlots(state->s, state->curr.textures, ARRAY_SIZE(TexPaths));
 
-    //init for editing
     state->wininfo.b.typingEnable = TRUE;
     state->wininfo.b.bufend = 0;
     state->wininfo.b.lineend = 0;
 
-    //reserve lower ten layers for text
-    //upper layers for sprites
-    //Will have to break that for the Feedback
-    
-    //Create Sprites
+    //sprites
     Scene* curr = &state->curr;
     curr->graphics[SPRITE_EDIT] = CreateSpriteSh(state->s, (sm_vec2f){1080.0/1.5, 0}, (sm_vec2f){1080*2.49,1080*2}, TEX_EDIT, 6);
     curr->graphics[SPRITE_PROMPT] = CreateSpriteSh(state->s, (sm_vec2f){-1350, 0}, (sm_vec2f){1080*1.35, 1080*2}, TEX_PROMPT, 6);
-    curr->graphics[SPRITE_SUBMIT] = CreateSpriteSh(state->s, (sm_vec2f){-1380, 850}, (sm_vec2f){1000, 350}, TEX_SUBMIT, 5);
+    curr->graphics[SPRITE_SUBMIT] = CreateSpriteSh(state->s, (sm_vec2f){-1080, 600}, (sm_vec2f){30*8, 31*8}, TEX_SUBMIT, 5);
     curr->graphics[SPRITE_CURSOR] = CreateSpriteSh(state->s, (sm_vec2f){}, (sm_vec2f){30,70}, TEX_PROMPT, 4);
     {
         SheetEntry* e = GetSpriteSh(state->s, curr->graphics[SPRITE_CURSOR]);
         e->scale = (sm_vec2f){29, 23};
         e->selection = (sm_vec2f){0, 0};
     }
-
-    //important, transparent textures must be rendered last
-    //This is hacky but required for now
-    curr->graphics[SPRITE_CHISEL] = CreateSpriteSh(state->s, (sm_vec2f){1900, -900}, (sm_vec2f){1000, 1000}, TEX_CHISEL, 4);
     {
         SheetEntry* e = GetSpriteSh(state->s, curr->graphics[SPRITE_SUBMIT]);
         e->scale = (sm_vec2f){3, 1};
         e->selection = (sm_vec2f){2, 0};
     }
-
-    //disabled for now
-    curr->graphics[SPRITE_JUDGE] = CreateSpriteSh(state->s, (sm_vec2f){-1080*3, 0}, (sm_vec2f){1080*2, 1080*2}, TEX_JUDGE, -10);
-    curr->graphics[SPRITE_SPEECH_TOP] = CreateSpriteSh(state->s, (sm_vec2f){0, -700}, (sm_vec2f){50*35, 6*35}, TEX_SPEECH, -10);
-    curr->graphics[SPRITE_SPEECH_MIDDLE] = CreateSpriteSh(state->s, (sm_vec2f){0, -420}, (sm_vec2f){50*35, 14*35}, TEX_SPEECH, -10);
-    curr->graphics[SPRITE_SPEECH_BOTTOM] = CreateSpriteSh(state->s, (sm_vec2f){-75, -420 + 9*35}, (sm_vec2f){50*38, 6*35}, TEX_SPEECH, -10);
+    curr->graphics[SPRITE_JUDGE] = CreateSpriteSh(state->s, (sm_vec2f){-1080*3, 0}, (sm_vec2f){106*13, 168*13}, TEX_JUDGE, -10);
+    curr->graphics[SPRITE_SPEECH_TOP] = CreateSpriteSh(state->s, (sm_vec2f){100, -700-100}, (sm_vec2f){50*35, 6*35}, TEX_SPEECH, -10);
+    curr->graphics[SPRITE_SPEECH_MIDDLE] = CreateSpriteSh(state->s, (sm_vec2f){100, -420-100}, (sm_vec2f){50*35, 14*40}, TEX_SPEECH, -10);
+    curr->graphics[SPRITE_SPEECH_BOTTOM] = CreateSpriteSh(state->s, (sm_vec2f){-75+100, -420 + 9*35-100}, (sm_vec2f){50*38, 6*35}, TEX_SPEECH, -10);
     {
         SheetEntry* e = GetSpriteSh(state->s, curr->graphics[SPRITE_SPEECH_TOP]);
         e->scale = (sm_vec2f){3, 1};
@@ -111,18 +88,9 @@ void Level1Init(GameState* state) {
         e->scale = (sm_vec2f){3, 1};
         e->selection = (sm_vec2f){1, 0};
     }
+}
 
-}
-void Level1Destroy(GameState* state) {
-    for (int i = 0; i < NUM_SPRITES; i++) {
-        DestroySpriteSh(state->s, state->curr.graphics[i]);
-    }
-    for (int i = 0; i < ARRAY_SIZE(TexPaths); i++) {
-        DestroyTexture(&state->curr.textures[i]);
-    }
-    DestroyFont(&state->f);
-}
-void Level1Update(GameState* state, PresentInfo* p) {
+void Level2Update(GameState* state, PresentInfo* p) {
     u32 frameCounter = 0;
     double dt = 0;
     double accum = 0;
@@ -147,7 +115,7 @@ void Level1Update(GameState* state, PresentInfo* p) {
 
         accum += dt;
         ClearText(state->t);
-        SetColor(state->t, (sm_vec3f){0.3, 0.3, 0.3});
+        SetColor(state->t, (sm_vec3f){1.0, 1.0, 1.0});
         EditArea(state, &c, (sm_vec2f){-400, -820}, 3, 1.2, sc->graphics[SPRITE_CURSOR], accum);
         SetColor(state->t, (sm_vec3f){1.0, 1.0, 1.0});
 
@@ -156,7 +124,7 @@ void Level1Update(GameState* state, PresentInfo* p) {
         AppendText(state->t, 
                 Requirements[stagerequirements[substage].startidx],
                 strlen(Requirements[stagerequirements[substage].startidx]), 
-                (sm_vec2f){-1080*1.8, -800}, 3.5, 1.3);
+                (sm_vec2f){-1080*1.75, -700}, 3.5, 1.3);
         for (int i = 1; i < stagerequirements[substage].num; i++) {
             if (results[i]) SetColor(state->t, (sm_vec3f){0.5, 0.0, 0.0});
             else SetColor(state->t, (sm_vec3f){0.0, 0.5, 0.0});
@@ -185,7 +153,7 @@ void Level1Update(GameState* state, PresentInfo* p) {
             for (int i = 0; i < ARRAY_SIZE(results); i++) {
                 if (results[i]) enableButton = FALSE;
             }
-            if (enableButton && Button(state, &c, (sm_vec2f){-1380, 850}, (sm_vec2f){1000, 350}, sc->graphics[SPRITE_SUBMIT])) {
+            if (enableButton && Button(state, &c, (sm_vec2f){-1080, 600}, (sm_vec2f){30*8, 31*8}, sc->graphics[SPRITE_SUBMIT])) {
                 char savename[32];
                 snprintf(savename, 32, "./save/level1-%d.txt", substage + 1);
                 FILE* save = fopen(savename, "w");
@@ -208,7 +176,7 @@ void Level1Update(GameState* state, PresentInfo* p) {
 
         } else {
             const sm_vec2f start = (sm_vec2f){-1080*2.5, 0};
-            const sm_vec2f end = (sm_vec2f){-1080, 0};
+            const sm_vec2f end = (sm_vec2f){-1080*1.3, 0};
 
             if (slide < 1.0) slide += 0.9 * dt;
 
@@ -248,7 +216,7 @@ void Level1Update(GameState* state, PresentInfo* p) {
                         textpos++;
                     }
                 }
-                AppendText(state->t, feedbacktext[feedbackidx], textpos, (sm_vec2f){-75 - 50*15, -560}, 0.6, 1.2);
+                AppendText(state->t, feedbacktext[feedbackidx], textpos, (sm_vec2f){-75 - 50*15+100, -560-100}, 0.6, 1.2);
 
                 if (textpos >= textlen) {
                     if (glfwGetKey(sr_context.w, GLFW_KEY_SPACE) == GLFW_PRESS ||
@@ -256,9 +224,9 @@ void Level1Update(GameState* state, PresentInfo* p) {
                         sc->stage++;
                         if (sc->stage >= numstages) {
                             sc->stage = 0;
-                            state->mode = LEVEL2_PROMPT;
+                            state->mode = -1;//placeholder
                         } else {
-                            state->mode = LEVEL1_PROMPT;
+                            state->mode = LEVEL2_PROMPT;
                         }
                         return;
                     }
@@ -284,4 +252,14 @@ void Level1Update(GameState* state, PresentInfo* p) {
         double end = glfwGetTime();
         dt = end - start;
     }
+}
+
+void Level2Destroy(GameState* state) {
+    for (int i = 0; i < NUM_SPRITES; i++) {
+        DestroySpriteSh(state->s, state->curr.graphics[i]);
+    }
+    for (int i = 0; i < ARRAY_SIZE(TexPaths); i++) {
+        DestroyTexture(&state->curr.textures[i]);
+    }
+    DestroyFont(&state->f);
 }

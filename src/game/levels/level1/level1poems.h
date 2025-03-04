@@ -260,7 +260,7 @@ static void EssentialRequirements6(char* buffer, u32 size, u32* results) {
     results[2] = wordsper.incorrect;
 }
 
-static u32 OptionalRequirements1(const char* buffer, u32 size) {
+static u32 OptionalRequirements1(char* buffer, u32 size) {
     return 0;
 }
 
