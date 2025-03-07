@@ -59,17 +59,29 @@ void InitGame(GameState* state, TextRenderer* t, SheetRenderer* s) {
     
     //load audio
 
-    ma_LoadSound(a, TEST_MUSIC, SOUNDPATH("testmusic.wav"), TRUE, 0.5);
-    ma_PlaySound(a, TEST_MUSIC);
+    ma_LoadSound(a, TITLE_INTRO, SOUNDPATH("home_intro.wav"), FALSE, 0.5);
+    ma_LoadSound(a, TITLE_LOOP, SOUNDPATH("home_loop.wav"), TRUE, 0.5);
+
+    ma_LoadSound(a, LEVEL1_INTRO, SOUNDPATH("level1_intro.wav"), FALSE, 0.5);
+    ma_LoadSound(a, LEVEL1_LOOP, SOUNDPATH("level1_loop.wav"), TRUE, 0.5);
+
+    ma_LoadSound(a, LEVEL2_INTRO, SOUNDPATH("level2_intro.wav"), FALSE, 0.5);
+    ma_LoadSound(a, LEVEL2_LOOP, SOUNDPATH("level2_loop.wav"), TRUE, 0.5);
+
+    ma_LoadSound(a, CARVING_1, SOUNDPATH("carving.wav"), FALSE, 1.0);
+    ma_LoadSound(a, CARVING_2, SOUNDPATH("carving2.wav"), FALSE, 1.0);
+    ma_LoadSound(a, CARVING_3, SOUNDPATH("carving3.wav"), FALSE, 1.0);
+
     ma_device_start(&a->device);
 
 
     //state->mode = PLACEHOLDER_EDIT;
     //state->mode = LEVEL2_EDIT;
-    //state->mode = LEVEL2_PROMPT;
-    state->mode = LEVEL1_PROMPT;
-    state->curr.stage = 0;
+    state->mode = LEVEL2_PROMPT;
+    //state->mode = LEVEL1_PROMPT;
+    state->curr.stage = 4;
     //state->mode = LEVEL1_EDIT;
+    //state->mode = MAIN_MENU;
 }
 
 void DestroyGame(GameState* state, TextRenderer* t, SheetRenderer* s) {

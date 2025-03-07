@@ -156,7 +156,7 @@ void Level1Update(GameState* state, PresentInfo* p) {
         AppendText(state->t, 
                 Requirements[stagerequirements[substage].startidx],
                 strlen(Requirements[stagerequirements[substage].startidx]), 
-                (sm_vec2f){-1080*1.8, -800}, 3.5, 1.3);
+                (sm_vec2f){-1080*1.75, -800}, 3.5, 1.2);
         for (int i = 1; i < stagerequirements[substage].num; i++) {
             if (results[i]) SetColor(state->t, (sm_vec3f){0.5, 0.0, 0.0});
             else SetColor(state->t, (sm_vec3f){0.0, 0.5, 0.0});
@@ -164,7 +164,7 @@ void Level1Update(GameState* state, PresentInfo* p) {
             AppendText(state->t, 
                     Requirements[stagerequirements[substage].startidx + i],
                     strlen(Requirements[stagerequirements[substage].startidx + i]), 
-                    (sm_vec2f){-1080*1.8, y + 60*1.5}, 3.5, 1.3);
+                    (sm_vec2f){-1080*1.75, y + 60*1.5}, 3.5, 1.2);
         }
 
         if (!feedback) {
@@ -266,6 +266,12 @@ void Level1Update(GameState* state, PresentInfo* p) {
 
             }
 
+        }
+
+        //start loop when intro finishes
+        //intro should never start here
+        if (!state->audio.playing[LEVEL1_INTRO]) {
+            ma_PlaySound(&state->audio, LEVEL1_LOOP);
         }
 
         if (glfwGetKey(sr_context.w, GLFW_KEY_ESCAPE) == GLFW_PRESS) {

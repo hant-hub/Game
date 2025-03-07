@@ -40,8 +40,16 @@ typedef struct {
 } GameAudio;
 
 typedef enum {
-    TEST_MUSIC = 0,
-    TEST_CARVING
+    TITLE_INTRO = 0,
+    TITLE_LOOP,
+    LEVEL1_INTRO,
+    LEVEL1_LOOP,
+    LEVEL2_INTRO,
+    LEVEL2_LOOP,
+    CARVING_1,
+    CARVING_2,
+    CARVING_3,
+    NUM_SOUNDS,
 } SoundID;
 
 void audio_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount);

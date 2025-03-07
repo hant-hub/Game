@@ -84,6 +84,19 @@ static const u32 DialogueConf[] = {
     JUDGE_ID,
     JUDGE_ID,
     JUDGE_ID,
+    //stage 3 --------------
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    //stage 4 --------------
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    JUDGE_ID,
+    //stage 5 --------------
 
 };
 
@@ -105,13 +118,26 @@ static const char* Dialogue[] = {
     "I wish you could tell me how you felt",
     "Everytime you say I love you over and over, and\nI just don't know what it means to me anymore",
     //stage 3 -----------
-
+    "But I still feel like you've been absent all week",
+    "Our nightly calls, our evening texts",
+    "I'll be honest, as much as I am upset at you for\nditching me, I'm also just upset because I miss\nyou",
+    "You never gave me updates, you just left me\ncompletely alone for seven days straight",
+    "It hurt a lot to wake up without you each day",
+    //stage 4 -----------
+    "I appreciate all the messages, and I think I'd\nlike to talk until my bus arrives",
+    "Until then, I was thinking you could maybe help\nme out with something I'm writing",
+    "The song is called, \"Will They, Won't They\"",
+    "The song is about a, uhh, fictional couple, and I\ndon't know if they should remain 'together' or\n'apart'",
+    "I was wondering if you could write the last\nverse and decide for me",
+    //stage 5 -----------
 };
 
 static const Substage dialoguestages[] = {
     (Substage){0, 5},
     (Substage){5, 3},
     (Substage){8, 5},
+    (Substage){13, 5},
+    (Substage){18, 5},
 };
 
 static  u32 DialogLens[ARRAY_SIZE(Dialogue)] = {
@@ -176,6 +202,18 @@ void Level2PromptInit(GameState* state) {
         DialogLens[i] = strlen(Dialogue[i]);
     }
 
+    //reset sound
+    for (int i = 0; i < NUM_SOUNDS; i++) {
+        //skip the sounds which should be playing
+        if (i != LEVEL2_INTRO && i != LEVEL2_LOOP) {
+            ma_StopSound(&state->audio, i);
+        }
+    }
+
+    //start sounds if not already playing
+    if (!state->audio.playing[LEVEL2_LOOP] && !state->audio.playing[LEVEL2_INTRO]) {
+        ma_PlaySound(&state->audio, LEVEL2_INTRO);
+    }
 }
 
 void Level2PromptDestroy(GameState* state) {
@@ -268,6 +306,11 @@ void Level2PromptUpdate(GameState* state, PresentInfo* p) {
         if (glfwGetKey(sr_context.w, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
             glfwSetWindowShouldClose(sr_context.w, GLFW_TRUE);
             return;
+        }
+
+        //start loop when intro finishes
+        if (!state->audio.playing[LEVEL2_INTRO]) {
+            ma_PlaySound(&state->audio, LEVEL2_LOOP);
         }
 
         //draw frame

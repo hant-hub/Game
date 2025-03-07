@@ -56,8 +56,8 @@ void Level2Init(GameState* state) {
     //sprites
     Scene* curr = &state->curr;
     curr->graphics[SPRITE_EDIT] = CreateSpriteSh(state->s, (sm_vec2f){1080.0/1.5, 0}, (sm_vec2f){1080*2.49,1080*2}, TEX_EDIT, 6);
-    curr->graphics[SPRITE_PROMPT] = CreateSpriteSh(state->s, (sm_vec2f){-1350, 0}, (sm_vec2f){1080*1.35, 1080*2}, TEX_PROMPT, 6);
-    curr->graphics[SPRITE_SUBMIT] = CreateSpriteSh(state->s, (sm_vec2f){-1080, 600}, (sm_vec2f){30*8, 31*8}, TEX_SUBMIT, 5);
+    curr->graphics[SPRITE_PROMPT] = CreateSpriteSh(state->s, (sm_vec2f){-1300, 0}, (sm_vec2f){1080*1.30, 1080*2}, TEX_PROMPT, 6);
+    curr->graphics[SPRITE_SUBMIT] = CreateSpriteSh(state->s, (sm_vec2f){-1030, 600}, (sm_vec2f){30*8, 31*8}, TEX_SUBMIT, 5);
     curr->graphics[SPRITE_CURSOR] = CreateSpriteSh(state->s, (sm_vec2f){}, (sm_vec2f){30,70}, TEX_PROMPT, 4);
     {
         SheetEntry* e = GetSpriteSh(state->s, curr->graphics[SPRITE_CURSOR]);
@@ -124,7 +124,7 @@ void Level2Update(GameState* state, PresentInfo* p) {
         AppendText(state->t, 
                 Requirements[stagerequirements[substage].startidx],
                 strlen(Requirements[stagerequirements[substage].startidx]), 
-                (sm_vec2f){-1080*1.75, -700}, 3.5, 1.3);
+                (sm_vec2f){-1080*1.75, -700}, 3.5, 1.2);
         for (int i = 1; i < stagerequirements[substage].num; i++) {
             if (results[i]) SetColor(state->t, (sm_vec3f){0.5, 0.0, 0.0});
             else SetColor(state->t, (sm_vec3f){0.0, 0.5, 0.0});
@@ -132,7 +132,7 @@ void Level2Update(GameState* state, PresentInfo* p) {
             AppendText(state->t, 
                     Requirements[stagerequirements[substage].startidx + i],
                     strlen(Requirements[stagerequirements[substage].startidx + i]), 
-                    (sm_vec2f){-1080*1.8, y + 60*1.5}, 3.5, 1.3);
+                    (sm_vec2f){-1080*1.75, y + 60*1.5}, 3.5, 1.2);
         }
 
         if (!feedback) {
@@ -153,7 +153,7 @@ void Level2Update(GameState* state, PresentInfo* p) {
             for (int i = 0; i < ARRAY_SIZE(results); i++) {
                 if (results[i]) enableButton = FALSE;
             }
-            if (enableButton && Button(state, &c, (sm_vec2f){-1080, 600}, (sm_vec2f){30*8, 31*8}, sc->graphics[SPRITE_SUBMIT])) {
+            if (enableButton && Button(state, &c, (sm_vec2f){-1030, 600}, (sm_vec2f){30*8, 31*8}, sc->graphics[SPRITE_SUBMIT])) {
                 char savename[32];
                 snprintf(savename, 32, "./save/level1-%d.txt", substage + 1);
                 FILE* save = fopen(savename, "w");
@@ -234,6 +234,12 @@ void Level2Update(GameState* state, PresentInfo* p) {
 
             }
 
+        }
+
+        //start loop when intro finishes
+        //intro should never start here
+        if (!state->audio.playing[LEVEL2_INTRO]) {
+            ma_PlaySound(&state->audio, LEVEL2_LOOP);
         }
 
         if (glfwGetKey(sr_context.w, GLFW_KEY_ESCAPE) == GLFW_PRESS) {

@@ -13,6 +13,7 @@
 #include <text.h>
 #include "game/game.h"
 #include "test.h"
+#include "mainmenu/mainmenu.h"
 
 int main() {
 
@@ -93,6 +94,13 @@ int main() {
                     LevelSelectInit(&state);
                     LevelSelectUpdate(&state, &p); 
                     LevelSelectDestroy(&state);
+            }
+            break;
+            case MAIN_MENU:
+            {
+                    MainMenuInit(&state);
+                    MainMenuUpdate(&state, &p); 
+                    MainMenuDestroy(&state);
             }
             break;
             default:

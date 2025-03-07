@@ -285,6 +285,18 @@ void Level1PromptInit(GameState* state) {
         DialogLens[i] = strlen(Dialogue[i]);
     }
 
+    //reset sound
+    for (int i = 0; i < NUM_SOUNDS; i++) {
+        //skip the sounds which should be playing
+        if (i != LEVEL1_INTRO && i != LEVEL1_LOOP) {
+            ma_StopSound(&state->audio, i);
+        }
+    }
+
+    //start sounds if not already playing
+    if (!state->audio.playing[LEVEL1_LOOP] && !state->audio.playing[LEVEL1_INTRO]) {
+        ma_PlaySound(&state->audio, LEVEL1_INTRO);
+    }
 }
 
 void Level1PromptDestroy(GameState* state) {
