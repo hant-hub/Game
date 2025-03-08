@@ -1,0 +1,72 @@
+INSTALLATION
+To download this project use git clone
+as normal. Then run the command
+git submodule update --recursive --init,
+this will recursively download
+the submodules this repository requires
+such as SimpleRender and SimpleMath.
+
+Due to bugs in the git Submodule implementation
+you have to use SSH, however for most
+people who would even want to fork
+this repo that's probably a good idea.
+
+
+HOW TO BUILD
+
+First you have to build the SimpleRender
+library. To do this, go into lib/SimpleRender
+and type the command make BUILD=DEBUG.
+
+This creates the file sr.a in the build folder.
+Copy or move this file from the build folder
+into the build folder for the game project.
+
+Then to build the game itself, run
+make BUILD=DEBUG.
+
+This should create an executable called "app".
+Now when running the game make sure to run it
+from the build directory so that it can find the
+game assets and shaders it needs.
+
+If the build directory doesn't have a shaders
+folder you can copy directly from the
+SimpleRender folder.
+
+LINUX
+
+All the build instructions should work as normal
+on any linux system, simply ensure that Freetype
+and the Vulkan SDK are installed using the package
+manager of your system.
+
+WINDOWS
+
+This project is buildable in MSYS2 which is what
+was used during development, however it requires
+additional steps.
+
+You need to include Freetype, and then dynamically
+link GLFW, Freetype, Vulkan, as well as the
+standard library through gdi and gccseh.
+
+Once you do that, you need to include the Freetype
+DLL in your game folder. You also need to
+include Freetype's dependencies due to an issue
+with the Freetype DLL not being fully linked.
+
+You can also attempt to use MSVC or Cross compile
+however I have not tried that and there are no
+garuntees it is possible. This project was written
+using C17 compilers, however it should be compilant
+with C99 as it uses VLAs and Structure dot initilization.
+
+
+------------------------------------------------------
+
+Hopefully future versions will fix this but currently
+this project is not being actively maintained since
+I have school.
+
+
