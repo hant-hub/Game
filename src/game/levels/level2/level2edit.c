@@ -228,6 +228,7 @@ void Level2Update(GameState* state, PresentInfo* p) {
                         } else {
                             state->mode = LEVEL2_PROMPT;
                         }
+                        state->mode = ELI_POEM;//for presentation
                         return;
                     }
                 }

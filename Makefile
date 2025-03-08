@@ -38,7 +38,7 @@ ifeq ($(BUILD), DEBUG)
 endif
 
 ifeq ($(BUILD), RELEASE)
-	BUILD_FLAGS = -O2
+	BUILD_FLAGS = -O2 -mavx
 endif
 
 CFLAGS := $(BUILD_FLAGS) $(INC_FLAGS) -MMD -MP -mavx -D$(BUILD)

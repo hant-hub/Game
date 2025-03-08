@@ -120,6 +120,23 @@ void EditArea(GameState* state, UIContext* c, sm_vec2f pos, u32 layer, float sca
     }
 }
 
+bool KeyButtonEx(GameState* s, UIContext* c, int keycode, u32 uuid) {
+
+    if (c->active == uuid) {
+        if (c->hot == keycode && glfwGetKey(sr_context.w, keycode) == GLFW_RELEASE) {
+            c->active = -1;
+            c->hot = -1;
+            return TRUE;
+        }
+    }
+
+    if (glfwGetKey(sr_context.w, keycode) == GLFW_PRESS) {
+        c->active = uuid;
+        c->hot = keycode;
+    }
+    return FALSE;
+}
+
 bool KeyButton(GameState* s, UIContext* c, u32 uuid) {
 
     if (c->active == uuid) {

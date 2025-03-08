@@ -14,6 +14,10 @@
 #include "game/game.h"
 #include "test.h"
 #include "mainmenu/mainmenu.h"
+#include "dash/dash.h"
+#include "eli/eli.h"
+#include "carmen/carmen.h"
+#include "wu/wu.h"
 
 int main() {
 
@@ -33,7 +37,7 @@ int main() {
     CRASH_CALL(SheetInit(s, &p.p, 0, (Sh_Camera){
                 .pos = (sm_vec2f){0, 0},
                 .rotation = 0,
-                .size = (sm_vec2f){1080, 1080}}, 20));
+                .size = (sm_vec2f){1080, 1080}}, 40));
 
     CRASH_CALL(TextInit(t, NULL, &p.p, 1));
     SetArea(t, (sm_vec2f){1080, 1080});
@@ -42,10 +46,52 @@ int main() {
     GameState state = {0};
 
 
-
+    state.p = &p;
     InitGame(&state, t, s);
     while (!glfwWindowShouldClose(sr_context.w)) {
         switch (state.mode) {
+            case WU_SLIDE:
+                {
+                    WuInit(&state);
+                    WuUpdate(&state, &p); 
+                    WuDestroy(&state);
+                }
+            break;
+            case ELI_POEM:
+                {
+                    EliPoemInit(&state);
+                    EliPoemUpdate(&state, &p); 
+                    EliPoemDestroy(&state);
+                }
+            break;
+            case CARMEN_SLIDES:
+                {
+                    CarmenInit(&state);
+                    CarmenUpdate(&state, &p); 
+                    CarmenDestroy(&state);
+                }
+            break;
+            case TEXT_DEMO:
+                {
+                    EliTextInit(&state);
+                    EliTextUpdate(&state, &p); 
+                    EliTextDestroy(&state);
+                }
+            break;
+            case ELI_SLIDES:
+                {
+                    EliInit(&state);
+                    EliUpdate(&state, &p); 
+                    EliDestroy(&state);
+                }
+            break;
+            case DASH_SLIDES:
+                {
+                    DashInit(&state);
+                    DashUpdate(&state, &p); 
+                    DashDestroy(&state);
+                }
+            break;
             case LEVEL1_EDIT:
                 {
                     Level1Init(&state);

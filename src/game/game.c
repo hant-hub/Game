@@ -68,20 +68,24 @@ void InitGame(GameState* state, TextRenderer* t, SheetRenderer* s) {
     ma_LoadSound(a, LEVEL2_INTRO, SOUNDPATH("level2_intro.wav"), FALSE, 0.5);
     ma_LoadSound(a, LEVEL2_LOOP, SOUNDPATH("level2_loop.wav"), TRUE, 0.5);
 
-    ma_LoadSound(a, CARVING_1, SOUNDPATH("carving.wav"), FALSE, 1.0);
+    ma_LoadSound(a, CARVING_1, SOUNDPATH("carving.wav"), FALSE, 3.0);
     ma_LoadSound(a, CARVING_2, SOUNDPATH("carving2.wav"), FALSE, 1.0);
     ma_LoadSound(a, CARVING_3, SOUNDPATH("carving3.wav"), FALSE, 1.0);
+
+    ma_LoadSound(a, TYPING, SOUNDPATH("typing.wav"), FALSE, 2.5);
 
     ma_device_start(&a->device);
 
 
     //state->mode = PLACEHOLDER_EDIT;
     //state->mode = LEVEL2_EDIT;
-    state->mode = LEVEL2_PROMPT;
+    
+    //state->mode = LEVEL2_PROMPT;
     //state->mode = LEVEL1_PROMPT;
-    state->curr.stage = 4;
+    //state->curr.stage = 4;
     //state->mode = LEVEL1_EDIT;
-    //state->mode = MAIN_MENU;
+    state->mode = MAIN_MENU;
+    state->mode = ELI_POEM;
 }
 
 void DestroyGame(GameState* state, TextRenderer* t, SheetRenderer* s) {

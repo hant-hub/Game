@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include "common.h"
+#include "frame.h"
 #include "sheet.h"
 #include "text.h"
 #include "texture.h"
@@ -22,6 +23,12 @@ typedef enum {
     LEVEL2_PROMPT,
     LEVEL2_EDIT,
     LEVEL_SELECT,
+    DASH_SLIDES,
+    ELI_SLIDES,
+    ELI_POEM,
+    WU_SLIDE,
+    CARMEN_SLIDES,
+    TEXT_DEMO,
 } ScreenState;
 
 typedef struct GameState GameState;
@@ -49,6 +56,7 @@ typedef enum {
     CARVING_1,
     CARVING_2,
     CARVING_3,
+    TYPING,
     NUM_SOUNDS,
 } SoundID;
 
@@ -60,6 +68,8 @@ void ma_StopSound(GameAudio* a, SoundID id);
 
 void CharHandler(GLFWwindow* window, u32 code);
 void KeyHandler(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+sm_vec3f HSLToRGB(float h, float s, float l);
 
 void InitGame(GameState* state, TextRenderer* t, SheetRenderer* s);
 void DestroyGame(GameState* state, TextRenderer* t, SheetRenderer* s);
@@ -90,8 +100,8 @@ typedef struct {
 } WindowInfo;
 
 typedef struct {
-    SheetHandle graphics[20];
-    Texture textures[20];
+    SheetHandle graphics[40];
+    Texture textures[40];
     u32 stage; //carries between screens
 } Scene;
 
@@ -112,6 +122,7 @@ static const sm_vec2f ButtonTable[] = {
 void EditArea(GameState* state, UIContext* c, sm_vec2f pos, u32 layer, float scale, SheetHandle cursor, double accum);
 bool Button(GameState* s, UIContext* c, sm_vec2f pos, sm_vec2f size, SheetHandle uuid);
 bool KeyButton(GameState* s, UIContext* c, u32 uuid);
+bool KeyButtonEx(GameState* s, UIContext* c, int keycode, u32 uuid);
 
 bool AnimateText(GameState* s, const char* text, u32 size, sm_vec2f pos, i32 layer, float scale, double accum, double rate);
 void SetNameTag(GameState* s, u32 left, u32 middle, u32 right, double width, sm_vec2f pos, sm_vec3f color);
@@ -122,6 +133,7 @@ struct GameState {
     GameAudio audio;
     SheetRenderer* s;
     TextRenderer* t;
+    PresentInfo* p;
     UIContext ucon;
     ScreenState mode;
     Scene prev;
