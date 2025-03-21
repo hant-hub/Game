@@ -82,10 +82,10 @@ void InitGame(GameState* state, TextRenderer* t, SheetRenderer* s) {
     
     //state->mode = LEVEL2_PROMPT;
     //state->mode = LEVEL1_PROMPT;
-    //state->curr.stage = 4;
+    //state->curr.stage = 3;
     //state->mode = LEVEL1_EDIT;
-    state->mode = MAIN_MENU;
-    state->mode = ELI_POEM;
+    //state->mode = MAIN_MENU;
+    //state->mode = ELI_SLIDES;
 }
 
 void DestroyGame(GameState* state, TextRenderer* t, SheetRenderer* s) {

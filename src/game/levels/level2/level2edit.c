@@ -244,7 +244,7 @@ void Level2Update(GameState* state, PresentInfo* p) {
         }
 
         if (glfwGetKey(sr_context.w, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            glfwSetWindowShouldClose(sr_context.w, GLFW_TRUE);
+            state->mode = ELI_POEM;//for presentation
             return;
         }
 

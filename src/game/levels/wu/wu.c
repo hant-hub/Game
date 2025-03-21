@@ -3,6 +3,8 @@
 
 typedef enum {
     SLIDE_1 = 0,
+    SLIDE_2,
+    SLIDE_3,
     NUM_TEX
 } TexID;
 
@@ -13,7 +15,9 @@ typedef enum {
 
 
 static const char* TexPaths[] = {
-    TEXPATH("wu/slide.png"),
+    TEXPATH("wu/slide1.png"),
+    TEXPATH("wu/slide2.png"),
+    TEXPATH("wu/slide3.png"),
 };
 
 

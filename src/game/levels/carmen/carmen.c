@@ -45,6 +45,10 @@ void CarmenInit(GameState* state) {
     Scene* sc = &state->curr;
 
     sc->graphics[SPRITE_MAIN] = CreateSpriteSh(state->s, (sm_vec2f){0,0}, (sm_vec2f){1920*2,1080*2}, SLIDE_1, 10);
+
+    for (int i = 0; i < NUM_SOUNDS; i++) {
+        state->audio.playing[i] = FALSE;
+    }
 }
 
 void CarmenDestroy(GameState* state) {
